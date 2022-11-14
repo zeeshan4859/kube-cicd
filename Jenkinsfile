@@ -93,16 +93,6 @@ pipeline {
             }
         }
 
-        // stage('Upload Imagebnnnnn') {
-        //   steps{
-        //     script {
-        //       docker.withRegistry( '', registryCredential ) {
-        //         dockerImage.push("$BUILD_NUMBER")
-        //         dockerImage.push('latest')
-        //       }
-        //     }
-        //   }
-        // }
 
         stage('Remove Unused Image'){
             steps{
@@ -115,7 +105,7 @@ pipeline {
         stage('K8s Deploy'){
             agent {label 'KOPS'}
                 steps {
-                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:v${BUILD_NUMBER} --namespace prod"
+                    sh "helm install --namespace prod vprofile-stack helm/vprofilecharts --set appimage=${registry}:v${BUILD_NUMBER} "
                 }
         }
 
