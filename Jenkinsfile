@@ -72,15 +72,22 @@ pipeline {
         //         }
         //     }
         // }
-
-        stage('Buid App Image'){
+        stage('Building image') {
             steps{
-                script {
-                    dockerImage = docker.buid registry + ":v$BUILD_NUMBER"
-                    
-                }
+              script {
+                dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
             }
         }
+
+        // stage('Buid App Image'){
+        //     steps{
+        //         script {
+        //             dockerImage = docker.buid registry + ":v$BUILD_NUMBER"
+                    
+        //         }
+        //     }
+        // }
 
         // stage('Upload Image'){
         //     steps{
