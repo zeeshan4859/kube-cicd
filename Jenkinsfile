@@ -109,12 +109,22 @@ pipeline {
                 sh "docker image rm -f $registry:v$BUILD_NUMBER"
             }
         }
+        
+
+
         stage('K8s Deploy'){
             agent {label 'KOPS'}
                 steps {
-                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:$v{BUILD_NUMBER} --namespace prod"
+                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:v${BUILD_NUMBER} --namespace prod"
                 }
         }
+
+    //     stage('Kubernetes Deploy') {
+	//   agent { label 'KOPS' }
+    //         steps {
+    //                 sh "helm upgrade --install --force vproifle-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod"
+    //         }
+    //     }
 
     }
 
