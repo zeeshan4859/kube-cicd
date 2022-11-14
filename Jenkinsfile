@@ -82,26 +82,27 @@ pipeline {
             }
         }
 
-        // stage('Upload Image'){
-        //     steps{
-        //         script{
-        //             docker.withRegistry( '', registrycredential )
-        //             dockerImage.push("$BUILD_NUMBER")
-        //             dockerImage.push('latest')
-        //         }
-        //     }
-        // }
-
-        stage('Upload Image') {
-          steps{
-            script {
-              docker.withRegistry( '', registryCredential ) {
-                dockerImage.push("$BUILD_NUMBER")
-                dockerImage.push('latest')
-              }
+        stage('Upload Image'){
+            steps{
+                script{
+                    docker.withRegistry( '', registrycredential ) {
+                    dockerImage.push("v$BUILD_NUMBER")
+                    //dockerImage.push('latest')
+                    }
+                }
             }
-          }
         }
+
+        // stage('Upload Imagebnnnnn') {
+        //   steps{
+        //     script {
+        //       docker.withRegistry( '', registryCredential ) {
+        //         dockerImage.push("$BUILD_NUMBER")
+        //         dockerImage.push('latest')
+        //       }
+        //     }
+        //   }
+        // }
 
         stage('Remove Unused Image'){
             steps{
