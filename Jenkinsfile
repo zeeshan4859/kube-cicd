@@ -72,44 +72,37 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Building image') {
+
+        stage('Buid App Image'){
             steps{
-              script {
-                dockerImage = docker.build registry + ":$BUILD_NUMBER"
-              }
+                script {
+                    dockerImage = docker.build registry + ":v$BUILD_NUMBER"
+                    
+                }
             }
         }
 
-        // stage('Buid App Image'){
-        //     steps{
-        //         script {
-        //             dockerImage = docker.buid registry + ":v$BUILD_NUMBER"
-                    
-        //         }
-        //     }
-        // }
+        stage('Upload Image'){
+            steps{
+                script{
+                    docker.withRegistry('', registrycredential)
+                    dockerImage.push("v$BUILD_NUMBER")
+                    dockerImage.push('latest')
+                }
+            }
+        }
 
-        // stage('Upload Image'){
-        //     steps{
-        //         script{
-        //             docker.withRegistry('', registrycredential)
-        //             dockerImage.push("v$BUILD_NUMBER")
-        //             dockerImage.push('latest')
-        //         }
-        //     }
-        // }
-
-        // stage('Remove Unused Image'){
-        //     steps{
-        //         sh "docker rm $registry:v$BUILD_NUMBER"
-        //     }
-        // }
-        // stage('K8s Deploy'){
-        //     agent {label 'KOPS'}
-        //         steps {
-        //             sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:$v{BUILD_NUMBER} --namespace prod"
-        //         }
-        // }
+        stage('Remove Unused Image'){
+            steps{
+                sh "docker rm $registry:v$BUILD_NUMBER"
+            }
+        }
+        stage('K8s Deploy'){
+            agent {label 'KOPS'}
+                steps {
+                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:$v{BUILD_NUMBER} --namespace prod"
+                }
+        }
 
     }
 
