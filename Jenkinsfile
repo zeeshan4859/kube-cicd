@@ -106,7 +106,7 @@ pipeline {
 
         stage('Remove Unused Image'){
             steps{
-                sh "docker rm $registry:v$BUILD_NUMBER"
+                sh "docker image rm -f $registry:v$BUILD_NUMBER"
             }
         }
         stage('K8s Deploy'){
