@@ -97,14 +97,6 @@ pipeline {
             }
         }
 
-        stage('K8s Deploy'){
-            agent {lable 'KOPS'}
-                steps {
-                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:$v{BUILD_NUMBER} --namespace prod"
-                }
-        }
-
     }
-
 
 }
